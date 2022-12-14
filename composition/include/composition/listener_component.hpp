@@ -19,17 +19,27 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
+#include <rclcpp_lifecycle/lifecycle_node.hpp>
+
+#include "nav2_util/lifecycle_node.hpp"
+#include <string>
+
 namespace composition
 {
 
-class Listener : public rclcpp::Node
+class Listener : public nav2_util::LifecycleNode
 {
 public:
   COMPOSITION_PUBLIC
   explicit Listener(const rclcpp::NodeOptions & options);
 
+	nav2_util::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
+	nav2_util::CallbackReturn on_activate(const rclcpp_lifecycle::State &)override;
+  nav2_util::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
+
 private:
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;
+  std::string topic_;
 };
 
 }  // namespace composition
